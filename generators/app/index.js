@@ -63,14 +63,14 @@ module.exports = yeoman.generators.Base.extend({
         // Add dependencies
         jhipsterFunc.addBowerDependency('bootstrap', '3.3.6');
         jhipsterFunc.addBowerDependency('arrive', '2.3.0');
-        jhipsterFunc.addBowerDependency('bootstrap-material-design', '0.5.6');
+        jhipsterFunc.addBowerDependency('bootstrap-material-design', '0.5.9');
 
         // Add AngularJs config
-        var config = "$.material.init();";
-        jhipsterFunc.addAngularJsConfig([''], config, 'Initialize material design');
+        //var config = "$.material.init();";
+        //jhipsterFunc.addAngularJsConfig([''], config, 'Initialize material design');
 
         // Fix navbar menu display
-        var navbarFullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
+        var navbarFullPath = 'src/main/webapp/app/layouts/navbar/navbar.html';
         var file = fs.readFileSync(navbarFullPath, 'utf8');
         file = file.replace(/class="dropdown pointer"/g, 'dropdown');
         file = file.replace(/class="dropdown-toggle" data-toggle="dropdown"/g, 'dropdown-toggle');
@@ -89,11 +89,15 @@ module.exports = yeoman.generators.Base.extend({
         var injectDependenciesAndConstants = function () {
             switch (this.frontendBuilder) {
                 case 'gulp':
-                    this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep:test', 'wiredep:app']);
+                    this.spawnCommand('gulp', ['ngconstant:dev', 'inject:dep', 'inject:app']);
                     break;
                 case 'grunt':
-                default:
                     this.spawnCommand('grunt', ['ngconstant:dev', 'wiredep']);
+                    break;
+                    
+                default:
+                    this.spawnCommand('gulp', ['ngconstant:dev', 'inject:dep', 'inject:app']);
+                    break;
             }
         };
 
